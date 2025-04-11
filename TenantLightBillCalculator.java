@@ -1,5 +1,3 @@
-package tenantLightBillCalculator;
-
 import java.util.Scanner;
 
 public class TenantLightBillCalculator {
