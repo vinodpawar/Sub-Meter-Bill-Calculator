@@ -29,7 +29,7 @@ public class TenantLightBillCalculator {
 		previousReadingBlock2 = scanner.nextFloat();
 
 		// Get current reading of sub-meter
-		System.out.println("Enter current reading for Shop 1 and 2 (Chat Bhandar):");
+		System.out.println("Enter current reading for Shop 1 and 2:");
 		currentReadingShops = scanner.nextFloat();
 		System.out.println("Enter current reading for Block 1:");
 		currentReadingBlock1 = scanner.nextFloat();
