@@ -1,73 +1,42 @@
 import java.util.Scanner;
-
 public class TenantLightBillCalculator {
+
+	// Declarations
+	public static float meterOneBill, meterOneUnits, rsPerUnit, currentReadingShops, previousReadingShops,
+			unitsConsumedShops, currentReadingBlock1, previousReadingBlock1, unitsConsumedBlock1, currentReadingBlock2,
+			previousReadingBlock2, unitsConsumedBlock2, shopsBill, Block1Bill, Block2Bill;
 
 	public static void main(String[] args) {
 
-		/*
-		 * input ----- bill amount and unit consumed for xx3051; Shop 1+2, Block 1,
-		 * Block 2 bill amount and unit consumed for xx0644; Home + 1 BHK
-		 * 
-		 * Reading recorded on 15th day of previous month Reading recorded on 15th day
-		 * of previous month
-		 * 
-		 * Do you need adjustments?
-		 */
-
-		// Main meter bill amount
-		float meterOneBill = 0.0f;
-		float meterOneUnits = 0.0f;
-		float rsPerUnit = 0.0f;
-
-		// Meter readings - current and previous for Shop 1 and 2 (Chat Bhandar)
-		float currentReadingShops = 0.0f;
-		float previousReadingShops = 0.0f;
-		float unitsConsumedShops = 0.0f;
-
-		// Meter readings - current and previous for Advocate
-		float currentReadingBlock1 = 0.0f;
-		float previousReadingBlock1 = 0.0f;
-		float unitsConsumedBlock1 = 0.0f;
-
-		// Meter readings - current and previous for Tailor
-		float currentReadingBlock2 = 0.0f;
-		float previousReadingBlock2 = 0.0f;
-		float unitsConsumedBlock2 = 0.0f;
-
-		// Final bill
-		float shopsBill = 0.0f;
-		float Block1Bill = 0.0f;
-		float Block2Bill = 0.0f;
-
 		Scanner scanner = new Scanner(System.in);
 
-		// Get Amount, Unit and Rupees per unit for xx3051
-		System.out.println("Enter bill amount for 490012183051:");
+		// Get MSEB bill and units consumed for current month
+		System.out.println("Enter MSEB bill amount for xx3051:");
 		meterOneBill = scanner.nextFloat();
-		System.out.println("Enter units consumed on 490012183051:");
+		System.out.println("Enter MSEB units consumed on xx3051:");
 		meterOneUnits = scanner.nextFloat();
 		rsPerUnit = (meterOneBill / meterOneUnits);
 		// System.out.println(String.format("%.2f", rsPerUnit));
 
-		// Get current and prev reading for Shop 1 and 2 and find units consumed
-		System.out.println("Enter current reading for Shop 1 and 2 (Chat Bhandar):");
-		currentReadingShops = scanner.nextFloat();
-		System.out.println("Enter previous reading for Shop 1 and 2 (Chat Bhandar):");
+		// Get previous reading of sub-meter
+		System.out.println("Enter previous reading for Shop 1 and 2:");
 		previousReadingShops = scanner.nextFloat();
 		unitsConsumedShops = currentReadingShops - previousReadingShops;
-
-		// Get current and prev reading for Block 1 and find units consumed
-		System.out.println("Enter current reading for Block 1:");
-		currentReadingBlock1 = scanner.nextFloat();
 		System.out.println("Enter previous reading for Block 1:");
 		previousReadingBlock1 = scanner.nextFloat();
 		unitsConsumedBlock1 = currentReadingBlock1 - previousReadingBlock1;
-
-		// Get current and prev reading for Block 2 and find unit consumed
-		System.out.println("Enter current reading for Block 2:");
-		currentReadingBlock2 = scanner.nextFloat();
 		System.out.println("Enter previous reading for Block 2");
 		previousReadingBlock2 = scanner.nextFloat();
+
+		// Get current reading of sub-meter
+		System.out.println("Enter current reading for Shop 1 and 2 (Chat Bhandar):");
+		currentReadingShops = scanner.nextFloat();
+		System.out.println("Enter current reading for Block 1:");
+		currentReadingBlock1 = scanner.nextFloat();
+		System.out.println("Enter current reading for Block 2:");
+		currentReadingBlock2 = scanner.nextFloat();
+
+		// Calculating the units consumed by indivisuals
 		unitsConsumedBlock2 = currentReadingBlock2 - previousReadingBlock2;
 		scanner.close();
 
@@ -78,7 +47,9 @@ public class TenantLightBillCalculator {
 
 		System.out.println("Actual bill: " + meterOneBill);
 		float genBill = shopsBill + Block1Bill + Block2Bill;
-		System.out.println(genBill);
+		System.out.println("Generated bill: " + genBill);
+		
+		// Checking if MSEB bill and Generated bill matches
 		if (meterOneBill == genBill) {
 
 			System.out.println(shopsBill);
@@ -88,6 +59,7 @@ public class TenantLightBillCalculator {
 
 		else {
 
+			// Adjusting bill if MSEB bill and Generated bill do not match
 			float diffForEach = (meterOneBill - (shopsBill + Block1Bill + Block2Bill)) / 3;
 			System.out.println("Shop 1 and 2: ");
 			System.out.println(shopsBill + diffForEach);
