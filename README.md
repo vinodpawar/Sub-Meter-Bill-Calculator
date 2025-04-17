@@ -1,4 +1,4 @@
-# Sub-Meter Bill Calculator
+# Sub Meter Bill Calculator
 
 This Java program helps tenants calculate their electricity bills based on their usage in shared living spaces. The program takes input for the total bill amount and the individual tenant's consumption (in kWh) to compute the share of the bill that the tenant is responsible for.
 
