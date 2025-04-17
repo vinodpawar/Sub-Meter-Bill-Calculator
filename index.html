@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tenant Light Bill Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 20px auto; padding: 10px; }
+    label, input { display: block; margin: 10px 0; }
+    button { margin-top: 15px; }
+    .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Tenant Light Bill Calculator</h1>
+
+  <label>MSEB Bill Amount for xx3051:
+    <input type="number" id="meterOneBill" step="any">
+  </label>
+
+  <label>MSEB Units Consumed on xx3051:
+    <input type="number" id="meterOneUnits" step="any">
+  </label>
+
+  <label>Previous Reading - Shops:
+    <input type="number" id="prevShops" step="any">
+  </label>
+  <label>Current Reading - Shops:
+    <input type="number" id="currShops" step="any">
+  </label>
+
+  <label>Previous Reading - Block 1:
+    <input type="number" id="prevBlock1" step="any">
+  </label>
+  <label>Current Reading - Block 1:
+    <input type="number" id="currBlock1" step="any">
+  </label>
+
+  <label>Previous Reading - Block 2:
+    <input type="number" id="prevBlock2" step="any">
+  </label>
+  <label>Current Reading - Block 2:
+    <input type="number" id="currBlock2" step="any">
+  </label>
+
+  <button onclick="calculateBill()">Calculate Bill</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+function calculateBill() {
+  const meterOneBill = parseFloat(document.getElementById('meterOneBill').value);
+  const meterOneUnits = parseFloat(document.getElementById('meterOneUnits').value);
+
+  const prevShops = parseFloat(document.getElementById('prevShops').value);
+  const currShops = parseFloat(document.getElementById('currShops').value);
+  const unitsShops = currShops - prevShops;
+
+  const prevBlock1 = parseFloat(document.getElementById('prevBlock1').value);
+  const currBlock1 = parseFloat(document.getElementById('currBlock1').value);
+  const unitsBlock1 = currBlock1 - prevBlock1;
+
+  const prevBlock2 = parseFloat(document.getElementById('prevBlock2').value);
+  const currBlock2 = parseFloat(document.getElementById('currBlock2').value);
+  const unitsBlock2 = currBlock2 - prevBlock2;
+
+  const finalRate = meterOneBill / meterOneUnits;
+
+  let shopsBill = unitsShops * finalRate;
+  let block1Bill = unitsBlock1 * finalRate;
+  let block2Bill = unitsBlock2 * finalRate;
+
+  const generatedBill = shopsBill + block1Bill + block2Bill;
+
+  let output = `<strong>Actual MSEB Bill:</strong> ₹${meterOneBill.toFixed(2)}<br>`;
+  output += `<strong>Total Units:</strong> ${meterOneUnits.toFixed(2)}<br>`;
+  output += `<strong>Rate per Unit:</strong> ₹${finalRate.toFixed(4)}<br><br>`;
+
+  if (Math.abs(meterOneBill - generatedBill) < 0.01) {
+    // Bills match
+    output += `<strong>Calculated Bills:</strong><br>`;
+    output += `Shops: ₹${shopsBill.toFixed(2)}<br>`;
+    output += `Block 1: ₹${block1Bill.toFixed(2)}<br>`;
+    output += `Block 2: ₹${block2Bill.toFixed(2)}<br>`;
+    output += `<br><strong>Total (Check):</strong> ₹${generatedBill.toFixed(2)}`;
+  } else {
+    // Adjust if mismatch
+    const totalBeforeAdjustment = shopsBill + block1Bill + block2Bill;
+    const diffForEach = (meterOneBill - totalBeforeAdjustment) / 3;
+
+    shopsBill += diffForEach;
+    block1Bill += diffForEach;
+    block2Bill += diffForEach;
+
+    output += `<strong>Adjusted Bills (due to mismatch):</strong><br>`;
+    output += `Shops (1 & 2): ₹${shopsBill.toFixed(2)}<br>`;
+    output += `Block 1: ₹${block1Bill.toFixed(2)}<br>`;
+    output += `Block 2: ₹${block2Bill.toFixed(2)}<br>`;
+    output += `<br><strong>Adjusted Total:</strong> ₹${(shopsBill + block1Bill + block2Bill).toFixed(2)}`;
+  }
+
+  document.getElementById('result').innerHTML = output;
+}
+</script>
+
+
+</body>
+</html>
